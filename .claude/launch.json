@@ -1,6 +1,14 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "formx", "runtimeExecutable": "/Users/barlevi/Documents/Claude/FormX/.venv/bin/python", "runtimeArgs": ["/Users/barlevi/Documents/Claude/FormX/serve.py"], "port": 5173 }
+    {
+      "name": "formx",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "/Users/barlevi/Documents/Claude/FormX/serve.py"
+      ],
+      "port": 5173,
+      "autoPort": true
+    }
   ]
 }
