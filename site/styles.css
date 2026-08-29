@@ -241,6 +241,7 @@ a { color: inherit; }
 .cta:active { transform: scale(.985); }
 
 .cta--inline { margin: 40px auto 0; width: min(341px, 100%); min-height: 84px; }
+.reviews .cta--inline { margin-top: 20px; }
 .cta--onDark { position: relative; z-index: 2; margin: 34px auto 0; width: min(313px, 100%); }
 
 /* =========================================================================
@@ -656,7 +657,21 @@ a { color: inherit; }
   font-size: clamp(19px, 2.6vw, 26px); line-height: 1.2; letter-spacing: -.01em;
   max-width: 44ch;
 }
-.lb__foot { margin-top: 26px; }
+.lb__desc {
+  margin-top: 18px;
+  font-size: 15.5px; line-height: 1.5;
+  max-width: 64ch; color: var(--ink);
+  white-space: pre-wrap;
+}
+.lb__foot {
+  margin-top: 26px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 18px 24px;
+}
+.lb__link {
+  font-size: 13px; font-weight: 500;
+  text-decoration: underline; text-underline-offset: 3px;
+  color: var(--muted);
+}
 
 /* =========================================================================
    DESKTOP  ≥1024px  — sticky rail on the right, wider content column
@@ -703,7 +718,7 @@ a { color: inherit; }
   .review__text { margin-top: 12px; font-size: 14px; }
 
   /* ── process: the “From → to” visual replaces the mobile headline ── */
-  .process { padding: 78px var(--gx) 0; }
+  .process { padding: 39px var(--gx) 0; }
   .process__title {
     position: absolute; width: 1px; height: 1px; padding: 0;
     margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
@@ -784,13 +799,19 @@ a { color: inherit; }
     pointer-events: none;
   }
   .work__arrow {
-    width: 34px; height: 34px;
+    width: 44px; height: 44px;
     display: grid; place-items: center;
+    border-radius: 50%;
     pointer-events: auto;
-    transition: opacity .2s ease;
+    transition: background-color .2s ease, box-shadow .2s ease;
   }
   .work__arrow svg { width: 13px; height: 24px; fill: none; stroke: var(--ink); stroke-width: 1; }
-  .work__arrow:hover { opacity: .55; }
+  .work__arrow:hover,
+  .work__arrow:focus-visible {
+    background-color: rgba(22, 23, 23, .07);
+    box-shadow: inset 0 0 0 1px rgba(22, 23, 23, .14);
+  }
+  .work__arrow:active { background-color: rgba(22, 23, 23, .13); }
 
   /* ── strengths ── */
   .strengths {
@@ -849,7 +870,21 @@ a { color: inherit; }
     display: block;
     position: absolute; z-index: 2;
     left: 60%; right: 8%; top: 66%;
-    height: 1px; background: rgba(255,255,255,.85);
+    height: 1px;
+    background: rgba(255, 255, 255, .32);
+    overflow: hidden;
+  }
+  /* a highlight that sweeps along the rule, left to right */
+  .footer__rule::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,.35) 35%,
+      rgba(255,255,255,1) 50%,
+      rgba(255,255,255,.35) 65%,
+      rgba(255,255,255,0) 100%);
+    animation: footerSweep 4.5s cubic-bezier(.45, 0, .55, 1) infinite;
   }
   .footer__legal { position: absolute; left: clamp(40px, 10.9cqw, 97px); bottom: 34px; }
 
@@ -880,7 +915,7 @@ a { color: inherit; }
     font-size: 13.1px; font-weight: 700;
     letter-spacing: .1em; text-transform: uppercase;
     color: var(--ink-2);
-    animation: bylinePulse 5s linear infinite;
+    animation: bylinePulse 3s linear infinite;
   }
   .rail__person {
     display: grid;
@@ -925,17 +960,17 @@ a { color: inherit; }
   30%           { -webkit-text-stroke-width: .3px; }
 }
 
-.quiz__step.is-active .opt { animation: optPulse 5s linear infinite; }
+.quiz__step.is-active .opt { animation: optPulse 3s linear infinite; }
 .quiz__step.is-active .opt:nth-child(1) { animation-delay: 0s; }
-.quiz__step.is-active .opt:nth-child(2) { animation-delay: .396s; }
-.quiz__step.is-active .opt:nth-child(3) { animation-delay: .792s; }
-.quiz__step.is-active .opt:nth-child(4) { animation-delay: 1.188s; }
-.quiz__step.is-active .opt:nth-child(5) { animation-delay: 1.584s; }
+.quiz__step.is-active .opt:nth-child(2) { animation-delay: .238s; }
+.quiz__step.is-active .opt:nth-child(3) { animation-delay: .475s; }
+.quiz__step.is-active .opt:nth-child(4) { animation-delay: .713s; }
+.quiz__step.is-active .opt:nth-child(5) { animation-delay: .951s; }
 .quiz__step.is-active .opt:hover,
 .quiz__step.is-active .opt:focus-within,
 .quiz__step.is-active .opt:has(:checked) { animation-play-state: paused; }
 
-#quizNext:not(:focus-visible):enabled { animation: ctaOutline 5s linear infinite; }
+#quizNext:not(:focus-visible):enabled { animation: ctaOutline 3s linear infinite; }
 
 /* =========================================================================
    REDUCED MOTION
@@ -963,3 +998,8 @@ a { color: inherit; }
   font-size: 12.5px; line-height: 1.35; text-align: left; color: #7A1C16;
 }
 .quiz__notWired code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; }
+
+@keyframes footerSweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}

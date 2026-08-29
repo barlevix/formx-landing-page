@@ -1,0 +1,93 @@
+{
+  "hero": {
+    "type": "video",
+    "src": "assets/video/hero.mp4",
+    "poster": "assets/img/hero-poster.jpg"
+  },
+  "footer": {
+    "type": "video",
+    "src": "assets/video/footer.mp4",
+    "poster": "assets/img/footer-poster.jpg"
+  },
+  "reviews": [
+    {
+      "initial": "J",
+      "color": "#1C73E7",
+      "text": "\"Fabulous company that does fabulous work. FormX is the place to do it.”"
+    },
+    {
+      "initial": "L",
+      "color": "#E94033",
+      "text": "“I'm so glad that we chose them for helping us to build our first home. It came out better than my expectations.”"
+    },
+    {
+      "initial": "T",
+      "color": "#2E6A4E",
+      "text": "\"Great service! Wonderful and efficient team. So happy with our new ADU!\""
+    },
+    {
+      "initial": "M",
+      "color": "#DC2F8F",
+      "text": "\"Love the modern design they lead with but found the full customization and optionality to be very refreshing.”"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Poolside Guest House",
+      "place": "San Jose",
+      "image": "assets/img/project-1.jpg",
+      "quote": "“FormX handled everything with confidence and care. The layout captures the views from every angle...”",
+      "tags": [
+        "Indoor–Outdoor Living",
+        "Built in 7 weeks",
+        "+35% Property Value"
+      ],
+      "description": "",
+      "url": "https://www.formx.com/gallery/e249891a-7b53-4530-ae26-6560ec5b4f7e",
+      "gallery": [
+        "assets/img/project-1.jpg",
+        "assets/img/space-kitchen.jpg",
+        "assets/img/space-lounge.jpg",
+        "assets/img/space-bath.jpg"
+      ]
+    },
+    {
+      "name": "Premium Studio ADU",
+      "place": "San Jose",
+      "image": "assets/img/project-2.jpg",
+      "quote": "“FormX handled everything with confidence and care. The layout captures the views from every angle...”",
+      "tags": [
+        "Indoor–Outdoor Living",
+        "Built in 7 weeks",
+        "+35% Property Value"
+      ],
+      "description": "",
+      "url": "https://www.formx.com/gallery/e249891a-7b53-4530-ae26-6560ec5b4f7e",
+      "gallery": [
+        "assets/img/project-2.jpg",
+        "assets/img/space-lounge.jpg",
+        "assets/img/space-bedroom.jpg",
+        "assets/img/space-kitchen.jpg"
+      ]
+    },
+    {
+      "name": "Hills Retreat ADU",
+      "place": "Los Altos Hills",
+      "image": "assets/img/project-3.jpg",
+      "quote": "“FormX handled everything with confidence and care. The layout captures the views from every angle...”",
+      "tags": [
+        "Indoor–Outdoor Living",
+        "Built in 7 weeks",
+        "+35% Property Value"
+      ],
+      "description": "",
+      "url": "https://www.formx.com/gallery/e249891a-7b53-4530-ae26-6560ec5b4f7e",
+      "gallery": [
+        "assets/img/project-3.jpg",
+        "assets/img/space-bath.jpg",
+        "assets/img/space-bedroom.jpg",
+        "assets/img/space-kitchen.jpg"
+      ]
+    }
+  ]
+}

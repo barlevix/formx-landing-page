@@ -1,0 +1,209 @@
+/* FormX CMS — editor styling. Plain, quiet, and out of the way: this is a tool,
+   not a showcase. It borrows the site's palette so the two feel related. */
+
+:root {
+  --white: #FEFEFD;
+  --offwhite: #F5F7F4;
+  --ink: #161717;
+  --muted: #6A6D68;
+  --line: #E2E5DF;
+  --green: #A4EF38;
+  --danger: #B3261E;
+  --radius: 14px;
+  --font: "Satoshi", ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+body {
+  background: var(--offwhite);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 80px;
+}
+img, video { display: block; max-width: 100%; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .88em; }
+:focus-visible { outline: 3px solid #2F6BFF; outline-offset: 2px; border-radius: 6px; }
+
+/* ── top bar ───────────────────────────────────────────────────────────── */
+.bar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap;
+  padding: 14px clamp(16px, 4vw, 40px);
+  background: rgba(254, 254, 253, .92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.bar__title { display: flex; align-items: center; gap: 14px; }
+.bar__title span { font-weight: 700; letter-spacing: -.01em; }
+.bar__actions { display: flex; align-items: center; gap: 12px; }
+
+.status { font-size: 13px; color: var(--muted); min-width: 8ch; }
+.status.is-ok    { color: #2E6A4E; }
+.status.is-error { color: var(--danger); }
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px; font-weight: 700;
+  white-space: nowrap; text-decoration: none;
+  transition: filter .15s ease, background-color .15s ease;
+}
+.btn--primary { background: var(--green); color: var(--ink); }
+.btn--primary:hover { filter: brightness(1.05); }
+.btn--primary:disabled { opacity: .5; cursor: default; filter: none; }
+.btn--ghost { border: 1px solid var(--line); background: var(--white); color: var(--ink); }
+.btn--ghost:hover { background: var(--offwhite); }
+.btn--add {
+  margin-top: 16px;
+  border: 1px dashed #C3C8BF; background: var(--white); color: var(--ink);
+  width: 100%; padding: 14px;
+}
+.btn--add:hover { border-color: var(--ink); }
+
+/* ── page ──────────────────────────────────────────────────────────────── */
+.loading { padding: 80px 24px; text-align: center; color: var(--muted); }
+
+.page {
+  max-width: 1000px;
+  margin-inline: auto;
+  padding: clamp(20px, 4vw, 40px) clamp(16px, 4vw, 40px) 0;
+  display: grid; gap: 26px;
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(18px, 3vw, 28px);
+}
+.card h2 { font-size: 21px; letter-spacing: -.02em; }
+.hint { margin-top: 8px; max-width: 68ch; font-size: 13.5px; color: var(--muted); }
+.list { margin-top: 20px; display: grid; gap: 14px; }
+
+/* ── fields ────────────────────────────────────────────────────────────── */
+.field { display: block; }
+.field > span { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
+.field small { display: block; margin-top: 5px; font-size: 12px; color: var(--muted); font-weight: 400; }
+.field input[type="text"],
+.field input[type="url"],
+.field textarea {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font-size: 14px;
+}
+.field textarea { resize: vertical; line-height: 1.4; }
+.field input:focus, .field textarea:focus { border-color: var(--ink); outline: none; }
+.field input[type="color"] {
+  width: 54px; height: 38px; padding: 3px;
+  border: 1px solid var(--line); border-radius: 9px; background: var(--white);
+  cursor: pointer;
+}
+.field--tiny { flex: 0 0 auto; }
+.field--tiny input[type="text"] { width: 68px; text-align: center; }
+.field-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: end; }
+.field-row > .field:not(.field--tiny) { flex: 1 1 200px; }
+
+/* ── repeatable rows ───────────────────────────────────────────────────── */
+.row {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px;
+  background: var(--offwhite);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.row--block { display: block; }
+.row__body { flex: 1; display: grid; gap: 12px; }
+.row__grip { display: flex; flex-direction: column; gap: 4px; }
+.row__head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.row__head .row__grip { flex-direction: row; }
+.row__head strong { flex: 1; font-size: 15px; letter-spacing: -.01em; }
+
+.icon {
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--white);
+  font-size: 13px; color: var(--muted);
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.icon:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.icon:disabled { opacity: .35; cursor: default; background: var(--white); color: var(--muted); border-color: var(--line); }
+.icon--danger:hover { background: var(--danger); border-color: var(--danger); }
+
+/* ── media ─────────────────────────────────────────────────────────────── */
+.media-grid { margin-top: 20px; display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.media { padding: 16px; background: var(--offwhite); border: 1px solid var(--line); border-radius: 12px; }
+.media h3 { font-size: 14px; margin-bottom: 12px; }
+
+.seg { display: inline-flex; padding: 3px; background: var(--white); border: 1px solid var(--line); border-radius: 9px; margin-bottom: 12px; }
+.seg label { position: relative; }
+.seg input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.seg span { display: block; padding: 5px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; }
+.seg input:checked + span { background: var(--ink); color: var(--white); }
+
+.preview {
+  aspect-ratio: 16 / 9;
+  background: #DDE0DA repeating-linear-gradient(45deg, transparent 0 8px, rgba(0,0,0,.03) 8px 16px);
+  border-radius: 9px; overflow: hidden;
+  display: grid; place-items: center;
+  font-size: 12.5px; color: var(--muted);
+}
+.preview img, .preview video { width: 100%; height: 100%; object-fit: cover; }
+
+.file { display: block; margin-top: 12px; }
+.file input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.file span {
+  display: block; padding: 9px 14px; text-align: center;
+  background: var(--white); border: 1px solid var(--line); border-radius: 9px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: border-color .15s ease;
+}
+.file span:hover { border-color: var(--ink); }
+.file input:focus-visible + span { outline: 3px solid #2F6BFF; outline-offset: 2px; }
+.file--small span { padding: 7px 12px; font-size: 12.5px; }
+
+.path { margin-top: 6px; font-size: 11.5px; color: var(--muted); word-break: break-all; }
+.path--small { font-size: 11px; }
+.is-busy { opacity: .55; pointer-events: none; }
+
+/* ── project rows ──────────────────────────────────────────────────────── */
+.project { display: grid; gap: 20px; grid-template-columns: minmax(200px, 260px) 1fr; }
+.project__fields { display: grid; gap: 12px; align-content: start; }
+
+.detail {
+  margin-top: 20px; padding-top: 18px;
+  border-top: 1px dashed var(--line);
+  display: grid; gap: 12px;
+}
+.detail h4 { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+
+.gallery { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.gallery:empty { display: none; }
+.gallery figure { position: relative; width: 88px; }
+.gallery img { width: 88px; height: 66px; object-fit: cover; border-radius: 7px; }
+.gallery button {
+  position: absolute; top: -6px; right: -6px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ink); color: var(--white);
+  font-size: 12px; line-height: 1;
+  display: grid; place-items: center;
+}
+.gallery button:hover { background: var(--danger); }
+
+.foot { font-size: 12.5px; color: var(--muted); text-align: center; padding: 4px 0 20px; }
+
+@media (max-width: 620px) {
+  .project { grid-template-columns: 1fr; }
+  .bar { position: static; }
+}

@@ -10,6 +10,10 @@
 
   /* ───────────────────────── CONTENT ───────────────────────── */
 
+  /* Everything below is the fallback used when content.json cannot be loaded
+     (opened straight off disk, or the file is missing/corrupt). The live values
+     live in site/content.json and are edited through the CMS at /admin. */
+
   /* Verbatim from the Figma review strip — four reviews on a loop. */
   const REVIEWS = [
     { i: 'J', c: '#1C73E7', t: '"Fabulous company that does fabulous work. FormX is the place to do it.”' },
@@ -84,21 +88,56 @@
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+  /* ───────────────────────── CONTENT LOADING ───────────────────────── */
+
+  const DEFAULTS = {
+    hero:   { type: 'video', src: 'assets/video/hero.mp4',   poster: 'assets/img/hero-poster.jpg' },
+    footer: { type: 'video', src: 'assets/video/footer.mp4', poster: 'assets/img/footer-poster.jpg' },
+    reviews: REVIEWS.map(r => ({ initial: r.i, color: r.c, text: r.t })),
+    projects: PROJECTS.map(p => ({
+      name: p.name, place: p.place, image: p.hero, quote: p.quote,
+      tags: p.tags, description: '', url: p.url, gallery: p.shots
+    }))
+  };
+
+  async function loadContent() {
+    try {
+      const res = await fetch('content.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();
+      return {
+        hero:     { ...DEFAULTS.hero,   ...(data.hero   || {}) },
+        footer:   { ...DEFAULTS.footer, ...(data.footer || {}) },
+        reviews:  Array.isArray(data.reviews)  && data.reviews.length  ? data.reviews  : DEFAULTS.reviews,
+        projects: Array.isArray(data.projects) && data.projects.length ? data.projects : DEFAULTS.projects
+      };
+    } catch (err) {
+      console.warn('[FormX] using built-in content —', err.message);
+      return DEFAULTS;
+    }
+  }
+
+  /* Projects are needed by the lightbox long after load, so keep a live copy. */
+  let projects = DEFAULTS.projects;
+
   /* ───────────────────────── REVIEW MARQUEE ───────────────────────── */
 
   const reviewCard = r => `
     <li class="review">
       <div class="review__head">
-        <span class="review__avatar" style="background:${r.c}" aria-hidden="true">${esc(r.i)}</span>
+        <span class="review__avatar" style="background:${esc(r.color)}" aria-hidden="true">${esc(r.initial)}</span>
         <img class="review__stars" src="assets/svg/stars.svg" alt="5 out of 5 stars" width="122" height="22" loading="lazy">
       </div>
-      <p class="review__text">${esc(r.t)}</p>
+      <p class="review__text">${esc(r.text)}</p>
     </li>`;
 
   const track = $('#reviewsTrack');
-  if (track) {
+
+  function renderReviews(list) {
+    if (!track) return;
     // two identical runs so the -50% translate loops seamlessly
-    track.innerHTML = REVIEWS.map(reviewCard).join('') + REVIEWS.map(reviewCard).join('');
+    const run = list.map(reviewCard).join('');
+    track.innerHTML = run + run;
     track.setAttribute('role', 'list');
     track.setAttribute('aria-label', 'What our clients say on Google');
   }
@@ -106,14 +145,16 @@
   /* ───────────────────────── PROJECT GALLERY ───────────────────────── */
 
   const workTrack = $('#workTrack');
-  if (workTrack) {
-    workTrack.innerHTML = PROJECTS.map((p, i) => `
+
+  function renderProjects(list) {
+    if (!workTrack) return;
+    workTrack.innerHTML = list.map((p, i) => `
       <li class="card">
         <button class="card__frame" type="button" data-project="${i}"
                 aria-label="Open the ${esc(p.name)} project gallery">
-          <img class="card__img" src="${p.hero}" alt="" loading="${i ? 'lazy' : 'eager'}">
+          <img class="card__img" src="${esc(p.image)}" alt="" loading="${i ? 'lazy' : 'eager'}">
           <span class="card__scrim" aria-hidden="true"></span>
-          <span class="card__tags">${p.tags.map(t => `<span class="card__tag">${esc(t)}</span>`).join('')}</span>
+          <span class="card__tags">${(p.tags || []).map(t => `<span class="card__tag">${esc(t)}</span>`).join('')}</span>
           <span class="card__quote">${esc(p.quote)}</span>
           <span class="card__more">Explore more</span>
         </button>
@@ -173,14 +214,23 @@
   let lastFocus = null;
 
   function openProject(i) {
-    const p = PROJECTS[i];
+    const p = projects[i];
     if (!p || !lb) return;
     lastFocus = document.activeElement;
-    $('#lbTitle').textContent = p.name;
-    $('#lbPlace').textContent = p.place;
-    $('#lbTags').innerHTML  = p.tags.map(t => `<li>${esc(t)}</li>`).join('');
-    $('#lbGrid').innerHTML  = p.shots.map(s => `<img src="${s}" alt="${esc(p.name)}" loading="lazy">`).join('');
-    $('#lbQuote').textContent = p.quote;
+    $('#lbTitle').textContent = p.name || '';
+    $('#lbPlace').textContent = p.place || '';
+    $('#lbTags').innerHTML = (p.tags || []).map(t => `<li>${esc(t)}</li>`).join('');
+    $('#lbGrid').innerHTML = (p.gallery || []).map(
+      src => `<img src="${esc(src)}" alt="${esc(p.name)}" loading="lazy">`).join('');
+    $('#lbQuote').textContent = p.quote || '';
+
+    const desc = $('#lbDesc');
+    desc.textContent = p.description || '';
+    desc.hidden = !p.description;
+
+    const link = $('#lbLink');
+    if (p.url) { link.href = p.url; link.hidden = false; } else { link.hidden = true; }
+
     lb.showModal();
   }
 
@@ -334,15 +384,53 @@
 
   render();
 
-  /* ───────────────────────── ODDS AND ENDS ───────────────────────── */
+  /* ───────────────────────── BACKGROUND MEDIA ───────────────────────── */
 
-  $('#year').textContent = new Date().getFullYear();
+  /* The hero and footer backgrounds can each be a video or a still image.
+     index.html ships the current ones inline so they render immediately; this
+     only rebuilds an element when content.json points somewhere else. */
+  function applyMedia(slot, media, { lazy }) {
+    const el = $('.' + slot + '__media');
+    if (!el || !media || !media.src) return;
 
-  /* The footer video is large and sits at the very bottom of the page, so it is
-     not fetched until the footer is close to the viewport. Until then the
+    const isVideo = media.type !== 'image';
+    const currentSrc = el.tagName === 'VIDEO'
+      ? (el.dataset.lazyVideo || el.querySelector('source')?.getAttribute('src') || '')
+      : el.getAttribute('src');
+    if (isVideo === (el.tagName === 'VIDEO') && currentSrc === media.src) return;
+
+    const next = document.createElement(isVideo ? 'video' : 'img');
+    next.className = slot + '__media';
+    next.setAttribute('aria-hidden', 'true');
+    next.tabIndex = -1;
+
+    if (isVideo) {
+      next.muted = true; next.loop = true; next.playsInline = true;
+      if (media.poster) next.poster = media.poster;
+      if (lazy) {
+        next.preload = 'none';
+        next.dataset.lazyVideo = media.src;
+      } else {
+        next.autoplay = true;
+        next.preload = 'metadata';
+        const source = document.createElement('source');
+        source.src = media.src; source.type = 'video/mp4';
+        next.append(source);
+      }
+    } else {
+      next.src = media.src;
+      next.alt = '';
+      next.loading = lazy ? 'lazy' : 'eager';
+    }
+    el.replaceWith(next);
+  }
+
+  /* The footer background is large and sits at the very bottom of the page, so
+     it is not fetched until the footer is close to the viewport. Until then the
      element shows its poster frame. */
-  const lazyVideos = $$('[data-lazy-video]');
-  if (lazyVideos.length) {
+  function watchLazyVideos() {
+    const lazyVideos = $$('[data-lazy-video]');
+    if (!lazyVideos.length) return;
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
@@ -359,7 +447,25 @@
     lazyVideos.forEach(v => io.observe(v));
   }
 
-  /* Safari and iOS occasionally ignore the autoplay attribute on a muted
-     background video; nudging it is harmless when it is already playing. */
-  $$('video[autoplay]').forEach(v => v.play().catch(() => {}));
+  /* ───────────────────────── ODDS AND ENDS ───────────────────────── */
+
+  $('#year').textContent = new Date().getFullYear();
+
+  /* ───────────────────────── BOOT ───────────────────────── */
+
+  renderReviews(DEFAULTS.reviews);
+  renderProjects(DEFAULTS.projects);
+
+  loadContent().then(content => {
+    projects = content.projects;
+    renderReviews(content.reviews);
+    renderProjects(content.projects);
+    applyMedia('hero',   content.hero,   { lazy: false });
+    applyMedia('footer', content.footer, { lazy: true });
+  }).finally(() => {
+    watchLazyVideos();
+    /* Safari and iOS occasionally ignore the autoplay attribute on a muted
+       background video; nudging it is harmless when it is already playing. */
+    $$('video[autoplay]').forEach(v => v.play().catch(() => {}));
+  });
 })();

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FormX — Edit site content</title>
+<link rel="icon" href="/assets/svg/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar__title">
+    <img src="/assets/svg/logo-dark.svg" alt="FormX" width="86" height="17">
+    <span>Edit site content</span>
+  </div>
+  <div class="bar__actions">
+    <span class="status" id="status" role="status"></span>
+    <a class="btn btn--ghost" href="/" target="_blank" rel="noopener">View site</a>
+    <button class="btn btn--primary" id="save" type="button">Save changes</button>
+  </div>
+</header>
+
+<main class="page" id="page" hidden>
+
+  <!-- ─────────── HERO & FOOTER BACKGROUNDS ─────────── -->
+  <section class="card">
+    <h2>Backgrounds</h2>
+    <p class="hint">
+      The big video or photo behind the top of the page and behind the footer.
+      Video works best muted, looping, and no wider than 1920px. The poster image
+      is what shows while the video loads, so pick a frame from the video itself.
+    </p>
+    <div class="media-grid">
+      <div class="media" data-slot="hero">
+        <h3>Hero — top of the page</h3>
+        <div class="seg" role="radiogroup" aria-label="Hero background type">
+          <label><input type="radio" name="hero-type" value="video"><span>Video</span></label>
+          <label><input type="radio" name="hero-type" value="image"><span>Image</span></label>
+        </div>
+        <div class="preview" data-preview></div>
+        <label class="file">
+          <input type="file" data-upload="src" accept="image/*,video/mp4,video/webm,video/quicktime">
+          <span>Replace background…</span>
+        </label>
+        <p class="path" data-path></p>
+        <label class="file file--small" data-poster-row>
+          <input type="file" data-upload="poster" accept="image/*">
+          <span>Replace poster image…</span>
+        </label>
+        <p class="path path--small" data-poster-path></p>
+      </div>
+
+      <div class="media" data-slot="footer">
+        <h3>Footer — bottom of the page</h3>
+        <div class="seg" role="radiogroup" aria-label="Footer background type">
+          <label><input type="radio" name="footer-type" value="video"><span>Video</span></label>
+          <label><input type="radio" name="footer-type" value="image"><span>Image</span></label>
+        </div>
+        <div class="preview" data-preview></div>
+        <label class="file">
+          <input type="file" data-upload="src" accept="image/*,video/mp4,video/webm,video/quicktime">
+          <span>Replace background…</span>
+        </label>
+        <p class="path" data-path></p>
+        <label class="file file--small" data-poster-row>
+          <input type="file" data-upload="poster" accept="image/*">
+          <span>Replace poster image…</span>
+        </label>
+        <p class="path path--small" data-poster-path></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── GOOGLE REVIEWS ─────────── -->
+  <section class="card">
+    <h2>Google reviews</h2>
+    <p class="hint">
+      The strip of review cards that scrolls under the hero. They loop, so three
+      or four is plenty. The circle shows the reviewer's first initial.
+    </p>
+    <div class="list" id="reviews"></div>
+    <button class="btn btn--add" type="button" data-add="review">Add a review</button>
+  </section>
+
+  <!-- ─────────── PROJECTS ─────────── -->
+  <section class="card">
+    <h2>Projects</h2>
+    <p class="hint">
+      The carousel under “California, You’re welcome.” Each project shows its
+      main image, quote and tags in the carousel. Everything under
+      <em>When someone opens this project</em> appears after a visitor clicks it.
+    </p>
+    <div class="list" id="projects"></div>
+    <button class="btn btn--add" type="button" data-add="project">Add a project</button>
+  </section>
+
+  <p class="foot">
+    Changes are saved to <code>site/content.json</code>. The previous version is
+    kept as <code>content.json.bak</code>.
+  </p>
+</main>
+
+<div class="loading" id="loading">Loading content…</div>
+
+<template id="tpl-review">
+  <article class="row">
+    <div class="row__grip">
+      <button class="icon" type="button" data-move="-1" aria-label="Move up">↑</button>
+      <button class="icon" type="button" data-move="1" aria-label="Move down">↓</button>
+    </div>
+    <div class="row__body">
+      <div class="field-row">
+        <label class="field field--tiny">
+          <span>Initial</span>
+          <input type="text" data-field="initial" maxlength="2">
+        </label>
+        <label class="field field--tiny">
+          <span>Circle colour</span>
+          <input type="color" data-field="color">
+        </label>
+      </div>
+      <label class="field">
+        <span>Review text</span>
+        <textarea data-field="text" rows="3"></textarea>
+      </label>
+    </div>
+    <button class="icon icon--danger" type="button" data-remove aria-label="Delete this review">✕</button>
+  </article>
+</template>
+
+<template id="tpl-project">
+  <article class="row row--block">
+    <header class="row__head">
+      <div class="row__grip">
+        <button class="icon" type="button" data-move="-1" aria-label="Move earlier">↑</button>
+        <button class="icon" type="button" data-move="1" aria-label="Move later">↓</button>
+      </div>
+      <strong data-title>Project</strong>
+      <button class="icon icon--danger" type="button" data-remove aria-label="Delete this project">✕</button>
+    </header>
+
+    <div class="project">
+      <div class="project__media">
+        <div class="preview" data-preview></div>
+        <label class="file">
+          <input type="file" data-upload="image" accept="image/*">
+          <span>Replace main image…</span>
+        </label>
+        <p class="path" data-path></p>
+      </div>
+
+      <div class="project__fields">
+        <div class="field-row">
+          <label class="field">
+            <span>Project name</span>
+            <input type="text" data-field="name">
+          </label>
+          <label class="field">
+            <span>Location</span>
+            <input type="text" data-field="place">
+          </label>
+        </div>
+        <label class="field">
+          <span>Quote shown on the card</span>
+          <textarea data-field="quote" rows="2"></textarea>
+        </label>
+        <label class="field">
+          <span>Tags</span>
+          <input type="text" data-field="tags" placeholder="Indoor–Outdoor Living, Built in 7 weeks">
+          <small>Separate with commas. Three fit comfortably.</small>
+        </label>
+      </div>
+    </div>
+
+    <div class="detail">
+      <h4>When someone opens this project</h4>
+      <label class="field">
+        <span>Description</span>
+        <textarea data-field="description" rows="4"
+                  placeholder="A few sentences about the project — what the client wanted, what you built, how long it took."></textarea>
+      </label>
+      <label class="field">
+        <span>Link (optional)</span>
+        <input type="url" data-field="url" placeholder="https://www.formx.com/gallery/…">
+      </label>
+      <div class="field">
+        <span>More images</span>
+        <div class="gallery" data-gallery></div>
+        <label class="file file--small">
+          <input type="file" data-upload="gallery" accept="image/*" multiple>
+          <span>Add images…</span>
+        </label>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script src="admin.js"></script>
+</body>
+</html>
