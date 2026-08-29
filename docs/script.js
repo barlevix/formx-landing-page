@@ -12,7 +12,7 @@
 
   /* Everything below is the fallback used when content.json cannot be loaded
      (opened straight off disk, or the file is missing/corrupt). The live values
-     live in site/content.json and are edited through the CMS at /admin. */
+     live in docs/content.json and are edited through the CMS. */
 
   /* Verbatim from the Figma review strip — four reviews on a loop. */
   const REVIEWS = [

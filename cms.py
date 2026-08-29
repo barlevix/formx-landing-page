@@ -60,7 +60,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw):
         super().__init__(*a, directory=SITE, **kw)
 
-    # /admin/... is served from the admin folder, everything else from site/
+    # /admin/... is served from the admin folder, everything else from docs/
     def translate_path(self, path):
         clean = path.split("?", 1)[0].split("#", 1)[0]
         if clean == "/admin":

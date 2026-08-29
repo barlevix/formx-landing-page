@@ -1,6 +1,6 @@
 /* FormX CMS — editor behaviour.
 
-   Loads site/content.json, edits it in place as a plain object, and PUTs the
+   Loads docs/content.json, edits it in place as a plain object, and PUTs the
    whole document back. Files go up as raw bytes to /api/upload, which returns
    the path to store. No framework, no build step. */
 (() => {
