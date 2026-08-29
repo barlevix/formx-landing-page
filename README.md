@@ -25,6 +25,20 @@ http://127.0.0.1:5173/admin/ and can write to `content.json`; `serve.py` is
 read-only. To deploy, upload the contents of `site/` to any static host — the
 published site only ever *reads* `content.json`, so nothing writable ships.
 
+## Live site
+
+**https://barlevix.github.io/formx-landing-page/** — served by GitHub Pages from
+the `gh-pages` branch, which holds the contents of `site/` at its root.
+
+After changing anything in `site/` (including saving from the CMS), publish it:
+
+```bash
+git push origin main            # the source
+git subtree push --prefix site origin gh-pages   # the live site
+```
+
+Only `site/` is published, so `admin/` and `cms.py` never reach the public URL.
+
 ## Structure
 
 ```
