@@ -6,7 +6,7 @@
   },
   "footer": {
     "type": "video",
-    "src": "assets/video/footer.mp4",
+    "src": "assets/uploads/footer.mp4",
     "poster": "assets/img/footer-poster.jpg"
   },
   "reviews": [
