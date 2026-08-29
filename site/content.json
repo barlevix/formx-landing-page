@@ -29,6 +29,11 @@
       "initial": "M",
       "color": "#DC2F8F",
       "text": "\"Love the modern design they lead with but found the full customization and optionality to be very refreshing.”"
+    },
+    {
+      "initial": "A",
+      "color": "#1C73E7",
+      "text": "Hello"
     }
   ],
   "projects": [
@@ -65,9 +70,7 @@
       "url": "https://www.formx.com/gallery/e249891a-7b53-4530-ae26-6560ec5b4f7e",
       "gallery": [
         "assets/img/project-2.jpg",
-        "assets/img/space-lounge.jpg",
-        "assets/img/space-bedroom.jpg",
-        "assets/img/space-kitchen.jpg"
+        "assets/img/space-lounge.jpg"
       ]
     },
     {
