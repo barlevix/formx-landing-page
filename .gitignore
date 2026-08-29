@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# editors
+.vscode/
+.idea/
+*.swp
+
+# python (serve.py is stdlib only; this is just in case)
+__pycache__/
+*.pyc
+.venv/
+venv/
