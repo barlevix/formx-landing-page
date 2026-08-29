@@ -1,0 +1,140 @@
+# Pages CMS configuration — https://pagescms.org
+#
+# Lets the team edit the landing page at
+# https://app.pagescms.org/barlevix/formx-landing-page
+# by signing in with GitHub. Saving writes docs/content.json and commits it;
+# GitHub Pages serves docs/ from main, so the live site updates on its own.
+#
+# The same file is edited by the local editor (python3 cms.py → /admin/), so
+# the two stay interchangeable.
+
+media:
+  input: docs/assets          # where files live in the repo
+  output: assets              # how the site refers to them (relative, no leading slash)
+  categories: [image, video]
+
+settings:
+  content:
+    merge: true
+
+content:
+  - name: content
+    label: Landing page
+    type: file
+    path: docs/content.json
+    fields:
+      # ── backgrounds ─────────────────────────────────────────────────────
+      - name: hero
+        label: Hero background
+        type: object
+        description: The video or photo behind the top of the page.
+        fields:
+          - name: type
+            label: Show a
+            type: select
+            options:
+              values:
+                - { value: video, label: Video }
+                - { value: image, label: Image }
+          - name: src
+            label: File
+            type: file
+            description: MP4 works best — muted, looping, no wider than 1920px.
+          - name: poster
+            label: Poster image
+            type: image
+            description: The still shown while the video loads. Use a frame from the video.
+
+      - name: footer
+        label: Footer background
+        type: object
+        description: The video or photo behind the bottom of the page.
+        fields:
+          - name: type
+            label: Show a
+            type: select
+            options:
+              values:
+                - { value: video, label: Video }
+                - { value: image, label: Image }
+          - name: src
+            label: File
+            type: file
+          - name: poster
+            label: Poster image
+            type: image
+
+      # ── google reviews ──────────────────────────────────────────────────
+      - name: reviews
+        label: Google reviews
+        type: object
+        description: The strip of cards that scrolls under the hero. It loops, so three or four is plenty.
+        list:
+          min: 1
+          collapsible:
+            collapsed: true
+            summary: "{fields.text}"
+        fields:
+          - name: initial
+            label: Initial
+            type: string
+            description: One letter, shown in the coloured circle.
+            required: true
+          - name: color
+            label: Circle colour
+            type: string
+            description: A hex colour, for example #1C73E7.
+            pattern:
+              regex: "^#[0-9a-fA-F]{6}$"
+              message: Use a six-digit hex colour such as #1C73E7.
+            required: true
+          - name: text
+            label: Review
+            type: text
+            required: true
+
+      # ── projects ────────────────────────────────────────────────────────
+      - name: projects
+        label: Projects
+        type: object
+        description: >-
+          The carousel under “California, You’re welcome.” The first four fields
+          show on the card; the rest appear when someone clicks it.
+        list:
+          min: 1
+          collapsible:
+            collapsed: true
+            summary: "{fields.name}"
+        fields:
+          - name: name
+            label: Project name
+            type: string
+            required: true
+          - name: place
+            label: Location
+            type: string
+          - name: image
+            label: Main image
+            type: image
+            required: true
+          - name: quote
+            label: Quote shown on the card
+            type: text
+          - name: tags
+            label: Tags
+            type: string
+            description: Three fit comfortably on the card.
+            list: true
+          - name: description
+            label: Description
+            type: text
+            description: Shown when a visitor opens the project.
+          - name: url
+            label: Link
+            type: string
+            description: Optional. Appears as “View on formx.com”.
+          - name: gallery
+            label: More images
+            type: image
+            description: Shown when a visitor opens the project.
+            list: true

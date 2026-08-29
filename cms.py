@@ -13,7 +13,7 @@ Run it while you are editing:
 It binds to 127.0.0.1 only and has no login, so it is meant for editing on your
 own machine. Do not expose it to the internet — anything that can reach it can
 overwrite the site's content and write files into assets/uploads. To publish,
-deploy the contents of site/ as static files; the published site only ever reads
+deploy the contents of docs/ as static files; the published site only ever reads
 content.json, so none of these endpoints ship with it.
 """
 
@@ -27,7 +27,7 @@ import urllib.parse
 from datetime import datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SITE = os.path.join(HERE, "site")
+SITE = os.path.join(HERE, "docs")
 ADMIN = os.path.join(HERE, "admin")
 CONTENT = os.path.join(SITE, "content.json")
 UPLOADS = os.path.join(SITE, "assets", "uploads")

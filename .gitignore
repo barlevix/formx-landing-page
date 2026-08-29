@@ -16,4 +16,4 @@ __pycache__/
 venv/
 
 # CMS rolling backup
-site/content.json.bak
+docs/content.json.bak

@@ -22,27 +22,30 @@ python3 cms.py
 
 Both serve http://127.0.0.1:5173. `cms.py` also serves the editor at
 http://127.0.0.1:5173/admin/ and can write to `content.json`; `serve.py` is
-read-only. To deploy, upload the contents of `site/` to any static host — the
+read-only. To deploy, upload the contents of `docs/` to any static host — the
 published site only ever *reads* `content.json`, so nothing writable ships.
 
 ## Live site
 
-**https://barlevix.github.io/formx-landing-page/** — served by GitHub Pages from
-the `gh-pages` branch, which holds the contents of `site/` at its root.
+**https://barlevix.github.io/formx-landing-page/** — GitHub Pages serves the
+`docs/` folder straight from `main`, so anything merged to `main` goes live on
+its own. (`docs/` is GitHub's convention for this; it is the website, not
+documentation.)
 
-After changing anything in `site/` (including saving from the CMS), publish it:
+## Editing on the web
 
-```bash
-git push origin main            # the source
-git subtree push --prefix site origin gh-pages   # the live site
-```
+**https://app.pagescms.org/barlevix/formx-landing-page** — sign in with GitHub.
+Anyone with write access to the repo can edit; saving commits `docs/content.json`
+and the live site rebuilds within a minute or two.
 
-Only `site/` is published, so `admin/` and `cms.py` never reach the public URL.
+`.pages.yml` in the repo root defines what is editable. `python3 cms.py` still
+gives the same editor offline at http://127.0.0.1:5173/admin/ — both write the
+same file.
 
 ## Structure
 
 ```
-site/                 ← this folder is the deployable site
+docs/                 ← this folder is the published site
   index.html          one page, semantic sections in Figma order
   styles.css          tokens → mobile layout → desktop overrides (@media ≥1024px)
   script.js           rendering + quiz, gallery, lightbox and reveal behaviour
@@ -74,8 +77,8 @@ Run `python3 cms.py` and open http://127.0.0.1:5173/admin/. Three sections:
   has a main image, quote and tags for the card, plus a description, an optional
   link and any number of extra images that appear when a visitor clicks it.
 
-*Save changes* writes `site/content.json` and keeps the previous version as
-`content.json.bak`. Uploads go to `site/assets/uploads/`. Redeploy `site/` to
+*Save changes* writes `docs/content.json` and keeps the previous version as
+`content.json.bak`. Uploads go to `docs/assets/uploads/`. Redeploy `docs/` to
 publish.
 
 The editor binds to `127.0.0.1` and has **no login**, so it is for editing on
@@ -109,7 +112,7 @@ verbatim. These are not in the file and need real copy:
 
 ## Video
 
-`site/assets/video/hero.mp4` and `footer.mp4` are the two background videos.
+`docs/assets/video/hero.mp4` and `footer.mp4` are the two background videos.
 Figma stores them as video *fills*, which its API does not export, so they were
 supplied separately. Each `<video>` also carries a poster frame exported from
 Figma, so the page still renders correctly if a video fails to load.
