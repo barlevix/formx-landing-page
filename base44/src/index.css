@@ -1,0 +1,5 @@
+/* Stock Base44 app globals — Tailwind, including preflight. formx.css is
+   imported by the page component and layers on top of this. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

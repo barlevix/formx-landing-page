@@ -32,6 +32,14 @@ published site only ever *reads* `content.json`, so nothing writable ships.
 its own. (`docs/` is GitHub's convention for this; it is the website, not
 documentation.)
 
+## Porting to Base44
+
+`base44/` holds the page as a React + Vite + Tailwind app, the shape Base44
+expects, so it can go in through their GitHub sync instead of being regenerated
+from a URL. It renders pixel-identically to the live site — verified by diffing
+full-page screenshots at 1440 and 375 (0 differing pixels). See
+[base44/README.md](base44/README.md).
+
 ## Editing on the web
 
 **https://app.pagescms.org/barlevix/formx-landing-page** — sign in with GitHub.

@@ -1,0 +1,6 @@
+node_modules/
+dist/
+
+# Copied from ../docs at sync time by sync-assets.sh — not duplicated in git
+public/assets/
+public/content.json
